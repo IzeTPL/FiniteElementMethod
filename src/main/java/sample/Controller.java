@@ -25,17 +25,18 @@ public class Controller implements Initializable {
 
         fileChooser = new FileChooser();
 
-    }
+        myButton.setOnAction((event) -> {
 
-    myButton.setOnAction(
-            new EventHandler<ActionEvent>() {
-        @Override
-        public void handle(final ActionEvent e) {
-            File file = fileChooser.showOpenDialog(stage);
-            if (file != null) {
-                openFile(file);
+            public void handle(final ActionEvent e) {
+                File file = fileChooser.showOpenDialog(stage);
+                if (file != null) {
+                    openFile(file);
+                }
             }
-        }
-    });
+
+        });
+
+
+    }
 
 }
