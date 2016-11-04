@@ -6,16 +6,22 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.awt.*;
+
 public class Main extends Application {
+
+    private Desktop desktop = Desktop.getDesktop();
 
     @Override
     public void start(Stage primaryStage) throws Exception{
+
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(getClass().getResource("/view/sample.fxml") );
         Parent parent = fxmlLoader.load();
         primaryStage.setTitle("Hello World");
         primaryStage.setScene(new Scene(parent, 300, 275));
         primaryStage.show();
+
     }
 
 
