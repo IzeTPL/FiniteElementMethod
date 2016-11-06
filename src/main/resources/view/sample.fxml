@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.layout.StackPane?>
-<StackPane prefHeight="150.0" prefWidth="200.0" xmlns:fx="http://javafx.com/fxml" fx:controller="sample.Controller">
-    <children>
-        <Button fx:id="myButton" mnemonicParsing="false" text="Browse..." />
-    </children>
-</StackPane>
+<?import java.net.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<GridPane prefHeight="300.0" prefWidth="500.0" xmlns:fx="http://javafx.com/fxml" fx:controller="sample.Controller">
+    <Button GridPane.columnIndex="0" GridPane.rowIndex="0" fx:id="myButton" mnemonicParsing="false" text="Browse..." />
+    <Button GridPane.columnIndex="1" GridPane.rowIndex="0" fx:id="solveButton" mnemonicParsing="false" text="Solve" />
+    <Label GridPane.columnIndex="0" GridPane.rowIndex="1" fx:id="label" text="data"/>
+    <ListView minWidth="300" GridPane.columnIndex="0" GridPane.rowIndex="2" fx:id="elementList"/>
+    <ListView minWidth="300" GridPane.columnIndex="1" GridPane.rowIndex="2" fx:id="nodeList" />
+</GridPane>

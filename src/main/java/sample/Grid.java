@@ -4,8 +4,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
+import java.io.File;
 import java.io.FileReader;
-import java.util.Iterator;
 
 /**
  * Created by marian on 30.10.16.
@@ -13,58 +13,130 @@ import java.util.Iterator;
 
 public class Grid {
 
-    private Integer nodeQuantity;
-    private Integer elementQuantity;
+    private int nodeQuantity;
+    private int elementQuantity;
     private Element[] elements;
     private Node[] nodes;
-    private Double heatFluxDensity;
-    private Double alpha;
-    private Double environmentTemperature;
-    private Double globalCoefficientMatrix[][];
-    private Double globalVector[];
-    private Double temperatures[];
+    private double heatFluxDensity;
+    private double alpha;
+    private double environmentTemperature;
+    private double globalCoefficientMatrix[][];
+    private double globalVector[];
+    private double temperatures[];
 
     private JSONParser parser;
+    private JSONObject jsonFileObject;
+    private File file;
 
-    public Grid() {
+    public Grid(File file) {
+
+        this.file = file;
+
         parser = new JSONParser();
+
+        generateGrid();
+
     }
 
     public void generateGrid() {
 
         try{
 
-            Object object = parser.parse(new FileReader("test.json"));
+            Object object = parser.parse(new FileReader(file));
+            jsonFileObject = (JSONObject) object;
 
-            JSONObject jsonObject = (JSONObject) object;
-            JSONArray jsonArray = (JSONArray) jsonObject.get("DataSets");
-
-            for(int i = 0; i < jsonArray.size(); i++) {
-
-                jsonObject = (JSONObject) jsonArray.get(i);
-                elementQuantity += (Integer) jsonObject.get("elementsQuantity");
-
-            }
-
-            elements = new Element[elementQuantity];
-
-            for(int i = 0; i < jsonArray.size(); i++) {
-
-                jsonObject = (JSONObject) jsonArray.get(i);
-                Integer elementQuantity = (Integer) jsonObject.get("elementsQuantity");
-
-                for(int j = i; j < i + elementQuantity; j++) {
-                    elements[j].setArea( (Double) jsonObject.get("area") );
-                    elements[j].setkValue( (Double) jsonObject.get("kValue") );
-                }
-
-            }
-
-
+            readElements();
+            readNodes();
+            readBoundaryConditions();
+            readParameters();
 
         } catch(Exception e) {
             e.printStackTrace();
         }
+
+    }
+
+    public void readElements() {
+
+        JSONArray jsonArray = (JSONArray) jsonFileObject.get("DataSets");
+
+        for(int i = 0; i < jsonArray.size(); i++) {
+
+            JSONObject jsonObject = (JSONObject) jsonArray.get(i);
+            elementQuantity += ( (Number) jsonObject.get("elementsQuantity") ).intValue();
+
+        }
+
+
+        elements = new Element[elementQuantity];
+
+        int count = 0;
+
+        for(int i = 0; i < jsonArray.size(); i++) {
+
+            JSONObject jsonObject = (JSONObject) jsonArray.get(i);
+            int elementQuantity = ( (Number) jsonObject.get("elementsQuantity") ).intValue();
+            int stop = count;
+
+            int startID =( (Number) jsonObject.get("StartID") ).intValue();
+
+            for(int j = count; j < stop + elementQuantity; j++) {
+
+                elements[j] = new Element();
+                elements[j].setArea( ( (Number) jsonObject.get("area") ).doubleValue() );
+                elements[j].setkValue( ( (Number) jsonObject.get("kValue") ).doubleValue() );
+                elements[j].setFirstID(startID);
+                elements[j].setSecondID(++startID);
+
+                count++;
+
+            }
+
+        }
+
+    }
+
+    public void readNodes() {
+
+        JSONArray jsonArray = (JSONArray) jsonFileObject.get("NodesSet");
+
+        nodeQuantity = elementQuantity + 1;
+        nodes = new Node[nodeQuantity];
+
+        for(int i = 0; i < jsonArray.size(); i++) {
+
+            JSONObject jsonObject = (JSONObject) jsonArray.get(i);
+            int ID =  ( (Number) jsonObject.get("NodeID") ).intValue();
+
+            nodes[ID] = new Node();
+            nodes[ID].setPositionX( ( (Number) jsonObject.get("positionX") ).doubleValue() );
+
+        }
+
+    }
+
+    public void readBoundaryConditions() {
+
+        JSONArray jsonArray = (JSONArray) jsonFileObject.get("BoundaryConditions");
+
+        for(int i = 0; i < jsonArray.size(); i++) {
+
+            JSONObject jsonObject = (JSONObject) jsonArray.get(i);
+            int ID = ((Number) jsonObject.get("NodeID")).intValue();
+            int BC = ((Number) jsonObject.get("BoundaryConditionID")).byteValue();
+            if(BC == 1) nodes[ID].setBoundaryConditions(BoundaryConditions.HEAT_FLUX_DENSITY);
+            if(BC == 2) nodes[ID].setBoundaryConditions(BoundaryConditions.CONVECTION);
+
+        }
+
+
+    }
+
+    public void readParameters() {
+
+        environmentTemperature = ( (Number) jsonFileObject.get("environmentTemperature") ).doubleValue();
+        alpha = ( (Number) jsonFileObject.get("alpha") ).doubleValue();
+        heatFluxDensity = ( (Number) jsonFileObject.get("heatFluxDensity") ).doubleValue();
 
     }
 
@@ -80,4 +152,31 @@ public class Grid {
 
     }
 
+    public int getNodeQuantity() {
+        return nodeQuantity;
+    }
+
+    public int getElementQuantity() {
+        return elementQuantity;
+    }
+
+    public Element[] getElements() {
+        return elements;
+    }
+
+    public Node[] getNodes() {
+        return nodes;
+    }
+
+    public double getHeatFluxDensity() {
+        return heatFluxDensity;
+    }
+
+    public double getAlpha() {
+        return alpha;
+    }
+
+    public double getEnvironmentTemperature() {
+        return environmentTemperature;
+    }
 }

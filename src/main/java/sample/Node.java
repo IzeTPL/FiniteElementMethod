@@ -5,8 +5,25 @@ package sample;
  */
 public class Node {
 
-    private Double temperature;
-    private Double positionX;
-    private BoundaryConditions boundaryConditions;
+    private double temperature;
+    private double positionX;
+    private BoundaryConditions boundaryConditions = BoundaryConditions.NULL;
 
+
+    public void setPositionX(double positionX) {
+        this.positionX = positionX;
+    }
+
+    public void setBoundaryConditions(BoundaryConditions boundaryConditions) {
+        this.boundaryConditions = boundaryConditions;
+    }
+
+
+    public double getPositionX() {
+        return positionX;
+    }
+
+    public BoundaryConditions getBoundaryConditions() {
+        return boundaryConditions;
+    }
 }

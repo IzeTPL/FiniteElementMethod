@@ -5,67 +5,51 @@ package sample;
  */
 public class Element {
 
-    private Integer firstID;
-    private Integer secondID;
-    private Double area;
-    private Double length;
-    private Double kValue;
-    private Double localHMatrix;
-    private Double localPMatrix;
+    private int firstID;
+    private int secondID;
+    private double area;
+    private double length;
+    private double kValue;
+    private double localHMatrix[][];
+    private double localPMatrix[][];
 
-    public Integer getFirstID() {
-        return firstID;
-    }
-
-    public void setFirstID(Integer firstID) {
-        this.firstID = firstID;
-    }
-
-    public Integer getSecondID() {
-        return secondID;
-    }
-
-    public void setSecondID(Integer secondID) {
-        this.secondID = secondID;
-    }
-
-    public Double getArea() {
-        return area;
-    }
-
-    public void setArea(Double area) {
+    public void setArea(double area) {
         this.area = area;
     }
 
-    public Double getLength() {
-        return length;
-    }
-
-    public void setLength(Double length) {
-        this.length = length;
-    }
-
-    public Double getkValue() {
-        return kValue;
-    }
-
-    public void setkValue(Double kValue) {
+    public void setkValue(double kValue) {
         this.kValue = kValue;
     }
 
-    public Double getLocalHMatrix() {
-        return localHMatrix;
+    public void setFirstID(int firstID) {
+        this.firstID = firstID;
     }
 
-    public void setLocalHMatrix(Double localHMatrix) {
-        this.localHMatrix = localHMatrix;
+    public void setSecondID(int secondID) {
+        this.secondID = secondID;
     }
 
-    public Double getLocalPMatrix() {
-        return localPMatrix;
+    public void setLength(double length) {
+        this.length = length;
     }
 
-    public void setLocalPMatrix(Double localPMatrix) {
-        this.localPMatrix = localPMatrix;
+    public int getFirstID() {
+        return firstID;
+    }
+
+    public int getSecondID() {
+        return secondID;
+    }
+
+    public double getArea() {
+        return area;
+    }
+
+    public double getLength() {
+        return length;
+    }
+
+    public double getkValue() {
+        return kValue;
     }
 }

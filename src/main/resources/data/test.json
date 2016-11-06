@@ -1,20 +1,21 @@
 {
 
   "DataSets" : [
-    {"elementsQuantity" : 2, "area" : 10, "kValue" : 10},
-    {"elementsQuantity" : 2, "area" : 5, "kValue" : 5}
+    {"StartID" : 0, "elementsQuantity" : 2, "area" : 10, "kValue" : 10},
+    {"StartID" : 2, "elementsQuantity" : 2, "area" : 5, "kValue" : 5}
   ],
 
-  "Nodes" : [
-    {"positionX" : 0},
-    {"positionX" : 5},
-    {"positionX" : 10},
-    {"positionX" : 15}
+  "NodesSet" : [
+    {"NodeID" : 0, "positionX" : 0},
+    {"NodeID" : 1, "positionX" : 5},
+    {"NodeID" : 2, "positionX" : 10},
+    {"NodeID" : 3, "positionX" : 15},
+    {"NodeID" : 4, "positionX" : 20}
   ],
 
   "BoundaryConditions" : [
-    {"NodeID": 0, "BoundaryConditionID": 1},
-    {"NodeID": 3, "BoundaryConditionID": 2}
+    {"NodeID" : 0, "BoundaryConditionID": 1},
+    {"NodeID" : 4, "BoundaryConditionID": 2}
   ],
 
   "environmentTemperature" : 10,
