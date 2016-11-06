@@ -11,7 +11,14 @@ public class Element {
     private double length;
     private double kValue;
     private double localHMatrix[][];
-    private double localPMatrix[][];
+    private double localPMatrix[];
+
+    public Element() {
+
+        localHMatrix = new double[2][2];
+        localPMatrix = new double[2];
+
+    }
 
     public void setArea(double area) {
         this.area = area;
@@ -51,5 +58,21 @@ public class Element {
 
     public double getkValue() {
         return kValue;
+    }
+
+    public double[][] getLocalHMatrix() {
+        return localHMatrix;
+    }
+
+    public void setLocalHMatrix(double[][] localHMatrix) {
+        this.localHMatrix = localHMatrix;
+    }
+
+    public double[] getLocalPMatrix() {
+        return localPMatrix;
+    }
+
+    public void setLocalPMatrix(double[] localPMatrix) {
+        this.localPMatrix = localPMatrix;
     }
 }

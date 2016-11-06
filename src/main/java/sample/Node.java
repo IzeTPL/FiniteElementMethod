@@ -26,4 +26,12 @@ public class Node {
     public BoundaryConditions getBoundaryConditions() {
         return boundaryConditions;
     }
+
+    public double getTemperature() {
+        return temperature;
+    }
+
+    public void setTemperature(double temperature) {
+        this.temperature = temperature;
+    }
 }
