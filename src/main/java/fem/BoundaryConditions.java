@@ -1,4 +1,4 @@
-package sample;
+package fem;
 
 /**
  * Created by marian on 30.10.16.

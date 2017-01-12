@@ -1,5 +1,4 @@
-package sample;
-
+import controller.MainController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -16,14 +15,13 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
 
-        //JavaFX
         FXMLLoader fxmlLoader = new FXMLLoader();
-        fxmlLoader.setLocation(getClass().getResource("/view/sample.fxml") );
+        fxmlLoader.setLocation(getClass().getResource("/view/Main.fxml") );
         Parent parent = fxmlLoader.load();
-        Controller controller = fxmlLoader.getController();
+        MainController controller = fxmlLoader.getController();
         controller.setStage(primaryStage);
-        primaryStage.setTitle("MES");
-        primaryStage.setScene(new Scene(parent, 600, 600));
+        primaryStage.setTitle("FEM");
+        primaryStage.setScene(new Scene(parent, 640, 480));
         primaryStage.show();
 
     }

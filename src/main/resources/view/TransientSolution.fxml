@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.chart.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<Tab closable="false" text="Transient Solution" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.TransientSolutionController">
+    <content>
+        <VBox>
+            <children>
+                <HBox>
+                    <children>
+                        <Button fx:id="browseButton2" mnemonicParsing="false" text="Browse..." HBox.hgrow="ALWAYS" />
+                        <Button fx:id="solveButton2" mnemonicParsing="false" text="Solve" HBox.hgrow="ALWAYS" />
+                        <Button fx:id="saveButton2" mnemonicParsing="false" text="Save" HBox.hgrow="ALWAYS" />
+                    </children>
+                </HBox>
+                <Label fx:id="label2" text="Label" />
+                <Accordion VBox.vgrow="ALWAYS">
+                    <panes>
+                        <TitledPane text="Elements and Nodes">
+                            <content>
+                                <HBox fx:id="hBox2">
+                                    <children>
+                                        <ListView fx:id="tauList2" HBox.hgrow="ALWAYS" />
+                                        <ListView fx:id="elementList2" HBox.hgrow="ALWAYS" />
+                                        <ListView fx:id="nodeList2" HBox.hgrow="ALWAYS" />
+                                    </children>
+                                </HBox>
+                            </content>
+                        </TitledPane>
+                        <TitledPane text="Matrix">
+                            <content>
+                                <ScrollPane fitToHeight="true" fitToWidth="true">
+                                    <content>
+                                        <GridPane fx:id="gridPaneMatrix2" />
+                                    </content>
+                                </ScrollPane>
+                            </content>
+                        </TitledPane>
+                        <TitledPane text="Plot">
+                            <content>
+                                <LineChart fx:id="lineChart" legendVisible="false">
+                                    <xAxis>
+                                        <NumberAxis label="Time, s" side="BOTTOM" />
+                                    </xAxis>
+                                    <yAxis>
+                                        <NumberAxis label="Temperature, C" side="LEFT" />
+                                    </yAxis>
+                                </LineChart>
+                            </content>
+                        </TitledPane>
+                    </panes>
+                </Accordion>
+            </children>
+            <padding>
+                <Insets top="5.0" />
+            </padding>
+        </VBox>
+    </content>
+</Tab>

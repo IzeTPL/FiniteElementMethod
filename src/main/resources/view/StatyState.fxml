@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<Tab xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+     fx:controller="controller.StatyStateController" closable="false" text="Staty State">
+    <content>
+        <VBox>
+            <children>
+                <HBox>
+                    <children>
+                        <Button fx:id="browseButton1" mnemonicParsing="false" text="Browse..." HBox.hgrow="ALWAYS"/>
+                        <Button fx:id="solveButton1" mnemonicParsing="false" text="Solve" HBox.hgrow="ALWAYS"/>
+                        <Button fx:id="saveButton1" mnemonicParsing="false" text="Save" HBox.hgrow="ALWAYS"/>
+                    </children>
+                </HBox>
+                <Label fx:id="label1" text="Label"/>
+                <Accordion VBox.vgrow="ALWAYS">
+                    <panes>
+                        <TitledPane text="Elements and Nodes">
+                            <content>
+                                <HBox fx:id="hBox1" prefHeight="100.0" prefWidth="200.0">
+                                    <children>
+                                        <ListView fx:id="elementList1" HBox.hgrow="ALWAYS"/>
+                                        <ListView fx:id="nodeList1" HBox.hgrow="ALWAYS"/>
+                                    </children>
+                                </HBox>
+                            </content>
+                        </TitledPane>
+                        <TitledPane text="Matrix">
+                            <content>
+                                <ScrollPane fitToHeight="true" fitToWidth="true">
+                                    <content>
+                                        <GridPane fx:id="gridPaneMatrix1">
+
+                                        </GridPane>
+                                    </content>
+                                </ScrollPane>
+                            </content>
+                        </TitledPane>
+                    </panes>
+                </Accordion>
+            </children>
+            <padding>
+                <Insets top="5.0"/>
+            </padding>
+        </VBox>
+    </content>
+</Tab>

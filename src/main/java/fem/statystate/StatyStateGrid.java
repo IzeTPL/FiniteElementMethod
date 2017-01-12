@@ -1,5 +1,9 @@
-package sample;
+package fem.statystate;
 
+import fem.BoundaryConditions;
+import fem.Element;
+import fem.Node;
+import model.IGrid;
 import org.apache.commons.math3.linear.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -7,14 +11,13 @@ import org.json.simple.parser.JSONParser;
 
 import java.io.File;
 import java.io.FileReader;
-import java.lang.reflect.Array;
 import java.util.Arrays;
 
 /**
  * Created by marian on 30.10.16.
  */
 
-public class Grid {
+public class StatyStateGrid implements IGrid{
 
     private int nodeQuantity;
     private int elementQuantity;
@@ -31,7 +34,7 @@ public class Grid {
     private JSONObject jsonFileObject;
     private File file;
 
-    public Grid(File file) {
+    public StatyStateGrid(File file) {
 
         this.file = file;
 
@@ -49,10 +52,8 @@ public class Grid {
             jsonFileObject = (JSONObject) object;
 
             readElements();
-            readNodes();
             readBoundaryConditions();
             readParameters();
-            calculateNodesLength();
 
             init();
 
@@ -96,6 +97,12 @@ public class Grid {
 
 
         elements = new Element[elementQuantity];
+        nodeQuantity = elementQuantity + 1;
+        nodes = new Node[nodeQuantity];
+
+        for (int i = 0; i < elementQuantity + 1; i++) {
+            nodes[i] = new Node();
+        }
 
         int count = 0;
 
@@ -105,38 +112,20 @@ public class Grid {
             int elementQuantity = ( (Number) jsonObject.get("elementsQuantity") ).intValue();
             int stop = count;
 
-            int startID =( (Number) jsonObject.get("StartID") ).intValue();
+            //int startID =( (Number) jsonObject.get("StartID") ).intValue();
 
             for(int j = count; j < stop + elementQuantity; j++) {
 
                 elements[j] = new Element();
                 elements[j].setArea( ( (Number) jsonObject.get("area") ).doubleValue() );
                 elements[j].setkValue( ( (Number) jsonObject.get("kValue") ).doubleValue() );
-                elements[j].setFirstID(startID);
-                elements[j].setSecondID(++startID);
+                elements[j].setLength( ( (Number) jsonObject.get("length") ).doubleValue() );
+                elements[j].setFirstID(j);
+                elements[j].setSecondID(j+1);
 
                 count++;
 
             }
-
-        }
-
-    }
-
-    public void readNodes() {
-
-        JSONArray jsonArray = (JSONArray) jsonFileObject.get("NodesSet");
-
-        nodeQuantity = elementQuantity + 1;
-        nodes = new Node[nodeQuantity];
-
-        for(int i = 0; i < jsonArray.size(); i++) {
-
-            JSONObject jsonObject = (JSONObject) jsonArray.get(i);
-            int ID =  ( (Number) jsonObject.get("NodeID") ).intValue();
-
-            nodes[ID] = new Node();
-            nodes[ID].setPositionX( ( (Number) jsonObject.get("positionX") ).doubleValue() );
 
         }
 
@@ -164,20 +153,6 @@ public class Grid {
         environmentTemperature = ( (Number) jsonFileObject.get("environmentTemperature") ).doubleValue();
         alpha = ( (Number) jsonFileObject.get("alpha") ).doubleValue();
         heatFluxDensity = ( (Number) jsonFileObject.get("heatFluxDensity") ).doubleValue();
-
-    }
-
-    private void calculateNodesLength() {
-
-        double length;
-
-        for (Element element: elements) {
-
-            length = Math.abs(nodes[element.getFirstID()].getPositionX() - nodes[element.getSecondID()].getPositionX());
-
-            element.setLength(length);
-
-        }
 
     }
 
@@ -225,6 +200,11 @@ public class Grid {
 
     }
 
+    @Override
+    public void generateLocalVector() {
+
+    }
+
     public void generateGlobalCoefficientMatrix() {
 
         for (int i = 0; i < elements.length; i++) {
@@ -241,6 +221,11 @@ public class Grid {
             globalVector[y] += elements[i].getLocalPMatrix()[1];
 
         }
+
+    }
+
+    @Override
+    public void generateGlobalVector() {
 
     }
 

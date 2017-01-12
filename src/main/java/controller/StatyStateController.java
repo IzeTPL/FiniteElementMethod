@@ -1,46 +1,47 @@
-package sample;
+package controller;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.net.URL;
-import java.util.Random;
-import java.util.ResourceBundle;
-
+import fem.BoundaryConditions;
+import fem.statystate.StatyStateGrid;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.layout.Border;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class Controller implements Initializable {
+
+public class StatyStateController implements Initializable {
 
     @FXML
-    private GridPane gridPaneMatrix;
-    @FXML //  fx:id="myButton"
-    private Button myButton; // Value injected by FXMLLoader
+    private Button browseButton1;
     @FXML
-    private Button solveButton;
+    private Button solveButton1;
     @FXML
-    private Button saveButton;
+    private Button saveButton1;
     @FXML
-    private ListView<String> elementList;
+    private Label label1;
     @FXML
-    private ListView<String> nodeList;
+    private ListView<String> elementList1;
     @FXML
-    private Label label;
+    private ListView<String> nodeList1;
+    @FXML
+    private GridPane gridPaneMatrix1;
+    @FXML
+    private HBox hBox1;
 
-    ObservableList<String> elements;
-    ObservableList<String> nodes;
+    ObservableList<String> elements1;
+    ObservableList<String> nodes1;
 
     //File
     private FileChooser fileChooser;
@@ -48,29 +49,21 @@ public class Controller implements Initializable {
     private File file;
 
     //MES
-    private Grid grid;
+    private StatyStateGrid grid;
 
     @Override // This method is called by the FXMLLoader when initialization is complete
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
-        assert myButton != null : "fx:id=\"myButton\" was not injected: check your FXML file 'simple.fxml'.";
-        assert solveButton != null : "fx:id=\"solveButton\" was not injected: check your FXML file 'simple.fxml'.";
-        assert elementList != null : "fx:id=\"elementList\" was not injected: check your FXML file 'simple.fxml'.";
-        assert nodeList != null : "fx:id=\"nodeList\" was not injected: check your FXML file 'simple.fxml'.";
-        assert label != null : "fx:id=\"label\" was not injected: check your FXML file 'simple.fxml'.";
 
-        elements = elementList.getItems();
-        nodes = nodeList.getItems();
+        elements1 = elementList1.getItems();
+        nodes1 = nodeList1.getItems();
 
-        String str = Main.loader.getResource("data/zadanie.json").toString();
-        str = str.substring(6);
-        file = new File(str);
+        file = loadFile("data/1/zadanie2.json");
 
         fileChooser = new FileChooser();
         fileChooser.setTitle("Wybierz dane wejściowe");
 
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("Plik JSON", "*json"),
-                new FileChooser.ExtensionFilter("Plik tekstowy", "*txt"),
                 new FileChooser.ExtensionFilter("Wszystkie pliki", "*.*")
         );
 
@@ -78,21 +71,21 @@ public class Controller implements Initializable {
 
         fileChooser.setInitialDirectory(initialDirectory);
 
-        myButton.setOnAction( (event) -> file = fileChooser.showOpenDialog(stage));
+        browseButton1.setOnAction( (event) -> file = fileChooser.showOpenDialog(stage));
 
-        solveButton.setOnAction( (event) -> {
+        solveButton1.setOnAction( (event) -> {
 
             if(file != null) {
-                grid = new Grid(file);
+                grid = new StatyStateGrid(file);
                 fillLists();
-                String text = "Temperature: " + grid.getEnvironmentTemperature() + "; Alpha: " + grid.getAlpha() + "; q: " + grid.getHeatFluxDensity();
-                label.setText(text);
+                String text = "Environment temperature: " + grid.getEnvironmentTemperature() + "; Alpha: " + grid.getAlpha() + "; q: " + grid.getHeatFluxDensity();
+                label1.setText(text);
                 showMatrix();
             }
 
         });
 
-        saveButton.setOnAction( (event) -> {
+        saveButton1.setOnAction( (event) -> {
 
             file = fileChooser.showSaveDialog(stage);
             if(file != null){
@@ -109,8 +102,8 @@ public class Controller implements Initializable {
 
         for (int i = 0; i < grid.getNodes().length; i++) {
 
-            content += "Node ID: " + i + "; x: " + grid.getNodes()[i].getPositionX() +
-                    "; T: " + grid.getNodes()[i].getTemperature() + "\n";
+            content += "Node ID: " + i +
+                    "; T: " + grid.getNodes()[i].getTemperature() + System.lineSeparator();
 
         }
 
@@ -128,29 +121,35 @@ public class Controller implements Initializable {
 
     public void fillLists() {
 
+        nodes1.clear();
+        elements1.clear();
+
         for(int i = 0; i < grid.getElementQuantity(); i++) {
 
             String string =
-                    "Nodes: " + grid.getElements()[i].getFirstID() + ", " + grid.getElements()[i].getSecondID() + "; " +
+                    "Nodes: " + grid.getElements()[i].getFirstID() + ", " + grid.getElements()[i].getSecondID() +
                     "; Area: " + grid.getElements()[i].getArea() +
                     "; Length: " + grid.getElements()[i].getLength() +
                     "; k: " + grid.getElements()[i].getkValue();
 
 
-            elements.add(string);
+            elements1.add(string);
 
         }
 
         for(int i = 0; i < grid.getNodeQuantity(); i++) {
 
-            String string = "ID: " + i + "; Positon: " + grid.getNodes()[i].getPositionX() + "; T: " + grid.getNodes()[i].getTemperature();
+            double temp = grid.getNodes()[i].getTemperature();
+            String string = "ID: " + i + "; T: " + temp;
 
             if(grid.getNodes()[i].getBoundaryConditions() == BoundaryConditions.HEAT_FLUX_DENSITY) string += "; BC - q";
             if(grid.getNodes()[i].getBoundaryConditions() == BoundaryConditions.CONVECTION) string += "; BC - c";
 
-            nodes.add(string);
+            nodes1.add(string);
 
         }
+
+        nodeList1.prefWidth(hBox1.getWidth()/2);
 
     }
 
@@ -158,7 +157,7 @@ public class Controller implements Initializable {
 
         Label[][] matrix; //names the grid of buttons
 
-        gridPaneMatrix.getChildren().clear();
+        gridPaneMatrix1.getChildren().clear();
 
         matrix = new Label[grid.getNodeQuantity()][grid.getNodeQuantity() + 1];
         for(int x = 0; x < grid.getNodeQuantity(); x++)
@@ -170,29 +169,29 @@ public class Controller implements Initializable {
                 matrix[x][y].setMinSize(75, 75);
                 matrix[x][y].setAlignment(Pos.CENTER);
                 matrix[x][y].setStyle("-fx-border-color: black;");
-                matrix[x][y].setText(String.valueOf(grid.getGlobalCoefficientMatrix()[x][y]));
+                matrix[x][y].setText(String.format("%.2f", grid.getGlobalCoefficientMatrix()[x][y]));
 
                 GridPane.setColumnIndex(matrix[x][y], y);
                 GridPane.setRowIndex(matrix[x][y], x);
-                gridPaneMatrix.getChildren().add(matrix[x][y]);
+                gridPaneMatrix1.getChildren().add(matrix[x][y]);
             }
 
             matrix[x][grid.getNodeQuantity()] = new Label(/*"(" + rand1 + ")"*/);
             matrix[x][grid.getNodeQuantity()].setMinSize(75, 75);
             matrix[x][grid.getNodeQuantity()].setAlignment(Pos.CENTER);
             matrix[x][grid.getNodeQuantity()].setStyle("-fx-border-color: black;");
-            matrix[x][grid.getNodeQuantity()].setText(String.valueOf(grid.getGlobalVector()[x]));
+            matrix[x][grid.getNodeQuantity()].setText(String.format("%.2f", grid.getGlobalVector()[x]));
 
             GridPane.setColumnIndex(matrix[x][grid.getNodeQuantity()], grid.getNodeQuantity());
             GridPane.setRowIndex(matrix[x][grid.getNodeQuantity()], x);
-            gridPaneMatrix.getChildren().add(matrix[x][grid.getNodeQuantity()]);
+            gridPaneMatrix1.getChildren().add(matrix[x][grid.getNodeQuantity()]);
 
         }
 
     }
 
-    public File getFile() {
-        return file;
+    public File loadFile(String fileName) {
+        return new File(StatyStateController.class.getClassLoader().getResource(fileName).toString().substring(6));
     }
 
     public void setStage(Stage stage) {

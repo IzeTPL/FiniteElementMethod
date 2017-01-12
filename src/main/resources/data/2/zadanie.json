@@ -1,0 +1,15 @@
+{
+
+  "environmentTemperature" : 200,
+  "alpha" : 300,
+  "materialDensity" : 7800,
+  "startingTemperature" : 100,
+  "maxRadius" : 0.08,
+  "deltaRadius" : 0.01,
+  "deltaTau" : 50,
+  "maxTau" : 1000,
+  "heatCapacity" : 700,
+  "kValue" : 25
+
+
+}

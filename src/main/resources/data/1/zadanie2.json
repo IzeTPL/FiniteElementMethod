@@ -1,0 +1,16 @@
+{
+
+  "DataSets" : [
+    {"elementsQuantity" : 4, "area" : 2, "kValue" : 50, "length" : 1.25}
+  ],
+
+  "BoundaryConditions" : [
+    {"NodeID" : 0, "BoundaryConditionID": 2},
+    {"NodeID" : 4, "BoundaryConditionID": 1}
+  ],
+
+  "environmentTemperature" : 400,
+  "alpha" : 10,
+  "heatFluxDensity" : -150
+
+}
